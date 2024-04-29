@@ -1,0 +1,129 @@
+openapi: 3.0.1
+info:
+  title: TicketUM API
+  description: |-
+    Esta es una API de creacion de Tickets para eventos.
+  termsOfService: http://swagger.io/terms/
+  version: v1
+servers:
+  - url: http://localhost:8080
+    description: TicketUM API
+paths:
+  /events:
+    get:
+      tags:
+        - events
+      summary: This endpoint returns the current available events
+      operationId: showEvents
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /events/{eventCode}:
+    get:
+      tags:
+        - events
+      summary: This endpoint returns the specific event by an event code
+      operationId: showEvent
+      parameters:
+        - name: eventCode
+          in: path
+          required: true
+          description: The event code
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /events/add-guest:
+    post:
+      tags:
+        - guests
+      summary: This endpoint adds a guest to an event
+      operationId: addGuest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventCode:
+                  type: string
+                guestName:
+                  type: string
+                guestEmail:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Guest'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+components:
+  schemas:
+    Guest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        dni:
+          type: string
+    Event:
+      type: object
+      properties:
+        eventCode:
+          type: string
+        name:
+          type: string
+        date:
+          type: string
+        location:
+          type: string
+        attendees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Guest'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Código de error
+        message:
+          type: string
+          description: Descripción del error
+      example:
+        code: 400
+        message: Bad Request
