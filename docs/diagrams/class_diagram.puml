@@ -16,15 +16,4 @@ class Guest {
     - dni: String
 }
 
-class Admin {
-    - username: String
-    - password: String
-    + login(username: String, password: String): boolean
-    + logout()
-    + create_event(event: Event)
-    + edit_event(event: Event)
-    + delete_event(event: Event)
-}
-
-Event "1" *-l- "1..*" Guest
-Admin "1" *-- "1..*" Event
+Event "1" *-- "1..*" Guest
