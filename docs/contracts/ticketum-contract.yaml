@@ -28,14 +28,14 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-  /events/{eventCode}:
+  /events/{code}:
     get:
       tags:
         - events
       summary: This endpoint returns the specific event by an event code
       operationId: showEvent
       parameters:
-        - name: eventCode
+        - name: code
           in: path
           required: true
           description: The event code
@@ -54,14 +54,44 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-  /events/add-guest:
+  /guests/create:
     post:
+      tags:
+        - guests
+      summary: This endpoint creates a new guest
+      operationId: createGuest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Guest'
+      responses:
+        '201':
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Guest'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /events/guests/add:
+    put:
       tags:
         - guests
       summary: This endpoint adds a guest to an event
       operationId: addGuest
+      parameters:
+        - name: eventCode
+          in: query
+          required: true
+          description: The event code
+          schema:
+            type: string
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -69,10 +99,46 @@ paths:
               properties:
                 eventCode:
                   type: string
-                guestName:
-                  type: string
-                guestEmail:
-                  type: string
+                guest:
+                  $ref: '#/components/schemas/Guest'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /guests/events/{eventCode}:
+    get:
+      tags:
+        - guests
+      summary: This endpoint returns a specific guest by dni and email within an event
+      operationId: showGuest
+      parameters:
+        - name: eventCode
+          in: path
+          required: true
+          description: The event code stored in the guest
+          schema:
+            type: string
+        - name: dni
+          in: query
+          required: true
+          description: The guest dni
+          schema:
+            type: string
+        - name: email
+          in: query
+          required: true
+          description: The guest email
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -100,10 +166,12 @@ components:
           type: string
         dni:
           type: string
+        eventCode:
+          type: string
     Event:
       type: object
       properties:
-        eventCode:
+        code:
           type: string
         name:
           type: string

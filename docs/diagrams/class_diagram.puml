@@ -1,12 +1,13 @@
 @startuml Class Diagram
 
 class Event {
+    - eventCode: String
     - name: String
     - date: Date
     - location: String
     - description: String
     - attendees: List<Guests>
-    + add_guest(guest: Guest)
+    + addGuest(guest: Guest)
 }
 
 class Guest {
@@ -14,6 +15,7 @@ class Guest {
     - email: String
     - phone: String
     - dni: String
+    - eventsList: List<Event>
 }
 
-Event "1" *-- "1..*" Guest
+Event "1..*" *--* "1..*" Guest
