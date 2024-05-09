@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: TicketUM API
+  title: TicketUM Event Management App - API
   description: |-
     Esta es una API de creacion de Tickets para eventos.
   termsOfService: http://swagger.io/terms/
@@ -17,7 +17,7 @@ paths:
       operationId: showEvents
       responses:
         '200':
-          description: OK
+          description: Events List
           content:
             '*/*':
               schema:
@@ -28,6 +28,7 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
+
   /events/{code}:
     get:
       tags:
@@ -43,7 +44,7 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
+          description: Details of the requested event
           content:
             '*/*':
               schema:
@@ -54,39 +55,16 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-  /guests/create:
+
+  /events/{eventCode}/registrations:
     post:
       tags:
         - guests
-      summary: This endpoint creates a new guest
-      operationId: createGuest
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Guest'
-      responses:
-        '201':
-          description: Created
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Guest'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error'
-  /events/guests/add:
-    put:
-      tags:
-        - guests
-      summary: This endpoint adds a guest to an event
+      summary: This endpoint creates a guest and add it to an event
       operationId: addGuest
       parameters:
         - name: eventCode
-          in: query
+          in: path
           required: true
           description: The event code
           schema:
@@ -103,7 +81,7 @@ paths:
                   $ref: '#/components/schemas/Guest'
       responses:
         '200':
-          description: OK
+          description: Registration Created
           content:
             '*/*':
               schema:
@@ -114,11 +92,12 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
+
   /guests/events/{eventCode}:
     get:
       tags:
         - guests
-      summary: This endpoint returns a specific guest by dni and email within an event
+      summary: This endpoint returns a specific guest registration by dni and email
       operationId: showGuest
       parameters:
         - name: eventCode
@@ -141,11 +120,44 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
+          description: Details of a Guest Registration of an specific event
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Guest'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/{eventCode}/registrations/{guestId}:
+    delete:
+      tags:
+        - guests
+      summary: This endpoint deletes a guest from an event
+      operationId: deleteGuestFromEvent
+      parameters:
+        - name: eventCode
+          in: path
+          required: true
+          description: The event code
+          schema:
+            type: string
+        - name: guestId
+          in: path
+          required: true
+          description: The guest id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Registration Canceled
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Event'
         '400':
           description: Bad Request
           content:
