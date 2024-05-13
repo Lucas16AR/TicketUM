@@ -6,7 +6,8 @@ class Event {
     - date: Date
     - location: String
     - description: String
-    - attendees: List<Guests>
+    - guests: List<Guests>
+    - capacity: Int
     + addGuest(guest: Guest)
 }
 

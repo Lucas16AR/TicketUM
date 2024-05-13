@@ -20,9 +20,6 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_ENGINE+config.DB_PATH+config.DB_NAME
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
-    
-    # from ticketum.main import main as main_blueprint
-    # app.register_blueprint(main_blueprint)
+    db.init_app(app)    
 
     return app
