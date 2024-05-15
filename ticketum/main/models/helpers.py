@@ -1,4 +1,4 @@
-from app import db
+from .. import db
 
 # Tabla intermedia para la relación many-to-many
 guest_event = db.Table('guest_event',

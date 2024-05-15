@@ -1,8 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api
 from config import Config
 import os
 
+# Initialize the API of Flask Restful
+api = Api()
+
+# Initialize the ORM
 db = SQLAlchemy()
 
 def create_app():
@@ -12,14 +17,43 @@ def create_app():
     config = Config()
     config.load_env_variables()
 
-    print("PATH DE LA BASE DE DATOS: ", config.DB_PATH+config.DB_NAME)
+    db_full_path = config.DB_PATH+config.DB_NAME
 
-    # Initialize the database
-    if not os.path.exists(config.DB_PATH+config.DB_NAME):
-        os.mknod(config.DB_PATH+config.DB_NAME)
+    print(f"Database path: {db_full_path}")
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_ENGINE+config.DB_PATH+config.DB_NAME
+    # Ensure the database directory exists
+    if not os.path.exists(config.DB_PATH):
+        try:
+            os.makedirs(config.DB_PATH)
+            print(f"Created directory: {config.DB_PATH}")
+        except Exception as e:
+            print(f"Error creating database directory: {e}")
+            raise
+
+    # Initialize the database file if it does not exist
+    if not os.path.exists(db_full_path):
+        try:
+            open(db_full_path, 'a').close()
+            print(f"Created database file: {db_full_path}")
+        except Exception as e:
+            print(f"Error creating database file: {e}")
+            raise
+
+    database_uri = "sqlite:////"+db_full_path
+
+    print(f"Database URI: {database_uri}")
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)    
+    db.init_app(app)
+
+    import main.controllers as controllers
+
+    api.add_resource(controllers.EventsResource, '/events')
+    api.add_resource(controllers.EventResource, '/events/<int:event_id>')
+    api.add_resource(controllers.GuestsResource, '/guests')
+    api.add_resource(controllers.GuestResource, '/guests/<int:guest_id>')
+
+    api.init_app(app)
 
     return app

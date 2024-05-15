@@ -2,7 +2,9 @@ from dotenv import load_dotenv
 import os
 
 class Config:
-
+    '''
+    Configuration class to load the environment variables
+    '''
     def __init__(self):
         load_dotenv()
 
@@ -14,3 +16,4 @@ class Config:
         self.DB_PORT = os.getenv('DB_PORT')
         self.DB_ENGINE = os.getenv('DB_ENGINE')
         self.DB_PATH = os.getenv('DB_PATH')
+        self.SV_PORT = os.getenv('SV_PORT')
