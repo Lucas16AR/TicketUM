@@ -1,6 +1,9 @@
 from .. import db
 
 class Guest(db.Model):
+    '''
+    Model of the Entity Guest
+    '''
     __tablename__ = 'guests'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -8,7 +11,7 @@ class Guest(db.Model):
     phone = db.Column(db.String(255), nullable=False)
     dni = db.Column(db.Integer, nullable=False)
     
-    inscriptions = db.relationship('Inscription', backref='guest', lazy=True)
+    inscriptions = db.relationship('Inscription', back_populates='guest')
 
     def __repr__(self):
         return f'<Guest {self.name}>'

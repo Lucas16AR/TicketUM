@@ -59,6 +59,8 @@ def create_app():
     api.add_resource(controllers.EventResource, '/events/<int:event_id>')
     api.add_resource(controllers.GuestsResource, '/guests')
     api.add_resource(controllers.GuestResource, '/guests/<int:guest_id>')
+    api.add_resource(controllers.InscriptionsResource, '/inscriptions')
+    api.add_resource(controllers.InscriptionResource, '/inscriptions/<int:inscription_id>')
 
     api.init_app(app)
 

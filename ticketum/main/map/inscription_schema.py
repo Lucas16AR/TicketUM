@@ -10,8 +10,8 @@ class InscriptionSchema(Schema):
     event_id = fields.Int(required=True)
     guest_id = fields.Int(required=True)
 
-    event = fields.Nested('EventSchema', exclude=('inscriptions',))
-    guest = fields.Nested('GuestSchema', exclude=('inscriptions',))
+    event = fields.Nested('EventSchema', exclude=('inscriptions_details',))
+    guest = fields.Nested('GuestSchema', exclude=('inscriptions_details',))
 
     # Method to deserialize the data
     @post_load

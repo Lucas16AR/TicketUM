@@ -11,7 +11,7 @@ class GuestSchema(Schema):
     phone = fields.Str(validate=validate.Length(max=20))
     dni = fields.Int(required=True)
 
-    inscriptions = fields.List(fields.Nested('InscriptionSchema', exclude=('guest',)))
+    inscriptions = fields.List(fields.Nested('InscriptionSchema', exclude=('guest_detail',)))
 
     # Method to deserialize the data
     @post_load

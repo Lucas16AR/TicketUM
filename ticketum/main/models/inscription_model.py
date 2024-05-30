@@ -10,8 +10,8 @@ class Inscription(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     guest_id = db.Column(db.Integer, db.ForeignKey('guests.id'), nullable=False)
 
-    event = db.relationship('Event', backref=db.backref('inscriptions', lazy='dynamic'))
-    guest = db.relationship('Guest', backref=db.backref('inscriptions', lazy='dynamic'))
+    event = db.relationship('Event', back_populates='inscriptions')
+    guest = db.relationship('Guest', back_populates='inscriptions')
 
     def __repr__(self):
         return f'<Inscription {self.id} - {self.status} - {self.event} - {self.guest}>'

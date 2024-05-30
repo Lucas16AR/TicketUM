@@ -12,13 +12,19 @@ class GuestsResource(Resource):
     '''
     def post(self):
         json_data = request.get_json()
+
         data = guest_schema.load(json_data)
-        guest = guest_service.create(**data)
-        return guest_schema.dump(guest)
+        guest = guest_service.create(
+            name=data.name,
+            email=data.email,
+            phone=data.phone,
+            dni=data.dni
+        )
+        return guest_schema.dump(guest), 201
 
     def get(self):
         guests = guest_service.find_all()
-        return guest_schema.dump(guests, many=True)
+        return guest_schema.dump(guests, many=True), 200
     
 class GuestResource(Resource):
     '''
@@ -26,14 +32,21 @@ class GuestResource(Resource):
     '''
     def get(self, guest_id):
         guest = guest_service.find_by_id(guest_id)
-        return guest_schema.dump(guest)
+        return guest_schema.dump(guest), 200
 
     def put(self, guest_id):
         json_data = request.get_json()
+
         data = guest_schema.load(json_data)
-        guest = guest_service.update(guest_id, **data)
-        return guest_schema.dump(guest)
+        guest = guest_service.update(
+            id=guest_id,
+            name=data.name,
+            email=data.email,
+            phone=data.phone,
+            dni=data.dni
+        )
+        return guest_schema.dump(guest), 200
 
     def delete(self, guest_id):
-        guest = guest_service.delete(guest_id)
-        return guest_schema.dump(guest)
+        guest_service.delete(guest_id)
+        return '', 204
