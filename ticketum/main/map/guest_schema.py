@@ -11,6 +11,8 @@ class GuestSchema(Schema):
     phone = fields.Str(validate=validate.Length(max=20))
     dni = fields.Int(required=True)
 
+    inscriptions = fields.List(fields.Nested('InscriptionSchema', exclude=('guest',)))
+
     # Method to deserialize the data
     @post_load
     def make_guest(self, data, **kwargs):

@@ -7,9 +7,8 @@ class Guest(db.Model):
     email = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(255), nullable=False)
     dni = db.Column(db.Integer, nullable=False)
-
-    # Relationship with Event
-    events = db.relationship('Event', secondary='guest_event', backref='guests')
+    
+    inscriptions = db.relationship('Inscription', backref='guest', lazy=True)
 
     def __repr__(self):
         return f'<Guest {self.name}>'

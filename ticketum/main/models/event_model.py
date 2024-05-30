@@ -10,8 +10,7 @@ class Event(db.Model):
     location = db.Column(db.String(255), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
 
-    # Relationship with Guest
-    guests = db.relationship('Guest', secondary='guest_event', backref='events')
+    inscriptions = db.relationship('Inscription', backref='event', lazy=True)
 
     def __repr__(self):
         return f'<Event {self.name}>'

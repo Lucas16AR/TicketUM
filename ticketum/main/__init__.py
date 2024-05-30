@@ -3,12 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from config import Config
 import os
+from flask_migrate import Migrate
 
 # Initialize the API of Flask Restful
 api = Api()
 
 # Initialize the ORM
 db = SQLAlchemy()
+
+# Initialize the migration engine
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -39,13 +43,15 @@ def create_app():
             print(f"Error creating database file: {e}")
             raise
 
-    database_uri = "sqlite:////"+db_full_path
+    database_uri = config.DB_ENGINE+db_full_path
 
     print(f"Database URI: {database_uri}")
 
     app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+
+    migrate.init_app(app, db)
 
     import main.controllers as controllers
 
