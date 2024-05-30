@@ -58,12 +58,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /registrations/{eventCode}:
+  /events/{eventCode}/inscriptions:
     post:
       tags:
         - inscriptions
-      summary: This endpoint creates a inscription and add it to an event
-      operationId: addGuest
+      summary: This endpoint creates an inscription and add it to an event
+      operationId: addInscription
       parameters:
         - name: eventCode
           in: path
@@ -79,6 +79,10 @@ paths:
       responses:
         '200':
           description: Registration Created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Inscription'
           
         '400':
           description: Bad Request
@@ -86,35 +90,29 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-
-  /inscriptions/{eventCode}:
+                
+  /events/{eventCode}/inscriptions/{guestCode}:
     get:
       tags:
         - inscriptions
-      summary: This endpoint returns a specific inscription by dni and email
+      summary: This endpoint returns a specific inscription by guest code
       operationId: showInscription
       parameters:
         - name: eventCode
           in: path
           required: true
-          description: The event code stored in the guest
+          description: The event code stored in the inscription
           schema:
             type: string
-        - name: dni
-          in: query
+        - name: guestCode
+          in: path
           required: true
-          description: The guest dni
-          schema:
-            type: string
-        - name: email
-          in: query
-          required: true
-          description: The guest email
-          schema:
+          description: The guest code stored in the inscription
+          schema: 
             type: string
       responses:
         '200':
-          description: Details of a Guest Registration of an specific event
+          description: Details of a Guest Inscription of an specific event
           content:
             '*/*':
               schema:
@@ -126,12 +124,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /events/{eventCode}/registrations/{guestCode}:
     delete:
       tags:
         - inscriptions
-      summary: This endpoint deletes a guest from an event
-      operationId: deleteGuestFromEvent
+      summary: This endpoint deletes a guest inscription from an event
+      operationId: deleteGuestInscriptionFromEvent
       parameters:
         - name: eventCode
           in: path
@@ -155,11 +152,7 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-  
-  
-  
-  
-  
+
 components:
   schemas:
     Guest:
@@ -207,6 +200,6 @@ components:
       properties:
         message:
           type: string
-          description: Descripción del error
+          description: Error description
       example:
         message: Bad Request
