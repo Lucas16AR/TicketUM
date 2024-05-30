@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate, post_load
+from marshmallow import Schema, fields, post_load
 from main.models import InscriptionModel
 
 class InscriptionSchema(Schema):
@@ -10,8 +10,8 @@ class InscriptionSchema(Schema):
     event_id = fields.Int(required=True)
     guest_id = fields.Int(required=True)
 
-    event = fields.Nested('EventSchema', exclude=('inscriptions_details',))
-    guest = fields.Nested('GuestSchema', exclude=('inscriptions_details',))
+    event = fields.Nested('EventSchema', exclude=('inscriptions',), dump_only=True)
+    guest = fields.Nested('GuestSchema', exclude=('inscriptions',), dump_only=True)
 
     # Method to deserialize the data
     @post_load

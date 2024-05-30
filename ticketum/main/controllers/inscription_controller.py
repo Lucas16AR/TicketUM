@@ -12,12 +12,12 @@ class InscriptionsResource(Resource):
     '''
     def post(self):
         json_data = request.get_json()
-
         data = inscription_schema.load(json_data)
+        
         inscription = inscription_service.create(
             status=data.status,
-            event_id=data.event.id,
-            guest_id=data.guest.id
+            event_id=data.event_id,
+            guest_id=data.guest_id
         )
         return inscription_schema.dump(inscription), 201
 
@@ -35,13 +35,13 @@ class InscriptionResource(Resource):
 
     def put(self, inscription_id):
         json_data = request.get_json()
-
         data = inscription_schema.load(json_data)
+        
         inscription = inscription_service.update(
             id=inscription_id,
             status=data.status,
-            event_id=data.event.id,
-            guest_id=data.guest.id
+            event_id=data.event_id,
+            guest_id=data.guest_id
         )
         return inscription_schema.dump(inscription), 200
 

@@ -21,7 +21,9 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Event'
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Event'
         '400':
           description: Bad Request
           content:
@@ -56,11 +58,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /events/{eventCode}/registrations:
+  /registrations/{eventCode}:
     post:
       tags:
-        - guests
-      summary: This endpoint creates a guest and add it to an event
+        - inscriptions
+      summary: This endpoint creates a inscription and add it to an event
       operationId: addGuest
       parameters:
         - name: eventCode
@@ -73,19 +75,11 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                eventCode:
-                  type: string
-                guest:
-                  $ref: '#/components/schemas/Guest'
+              $ref: '#/components/schemas/Guest'
       responses:
         '200':
           description: Registration Created
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Event'
+          
         '400':
           description: Bad Request
           content:
@@ -93,12 +87,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /events/{eventCode}/guests:
+  /inscriptions/{eventCode}:
     get:
       tags:
-        - guests
-      summary: This endpoint returns a specific guest registration by dni and email
-      operationId: showGuest
+        - inscriptions
+      summary: This endpoint returns a specific inscription by dni and email
+      operationId: showInscription
       parameters:
         - name: eventCode
           in: path
@@ -124,7 +118,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Guest'
+                $ref: '#/components/schemas/Inscription'
         '400':
           description: Bad Request
           content:
@@ -135,7 +129,7 @@ paths:
   /events/{eventCode}/registrations/{guestCode}:
     delete:
       tags:
-        - guests
+        - inscriptions
       summary: This endpoint deletes a guest from an event
       operationId: deleteGuestFromEvent
       parameters:
@@ -154,10 +148,7 @@ paths:
       responses:
         '200':
           description: Registration Canceled
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Event'
+
         '400':
           description: Bad Request
           content:
@@ -165,13 +156,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   
+  
+  
+  
+  
 components:
   schemas:
     Guest:
       type: object
       properties:
-        guestCode:
-          type: string
         name:
           type: string
         email:
@@ -180,6 +173,7 @@ components:
           type: string
         dni:
           type: string
+        
     Event:
       type: object
       properties:
@@ -187,23 +181,32 @@ components:
           type: string
         name:
           type: string
+        description:
+          type: string
         date:
           type: string
         location:
           type: string
-        attendees:
-          type: array
-          items:
-            $ref: '#/components/schemas/Guest'
+        capacity: 
+          type: integer
+        totalInscriptions:
+          type: integer
+    
+    Inscription:
+      type: object
+      properties:
+        status:
+          type: string
+        eventCode:
+          type: string
+        guestCode:
+          type: string
+          
     Error:
       type: object
       properties:
-        code:
-          type: integer
-          description: Código de error
         message:
           type: string
           description: Descripción del error
       example:
-        code: 400
         message: Bad Request
