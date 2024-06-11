@@ -18,8 +18,9 @@ class EventsResource(Resource):
         if 'date' not in json_data:
             json_data['date'] = datetime.now()
 
-        # Set the date to string type
-        json_data['date'] = json_data['date'].strftime('%Y-%m-%d %H:%M:%S')
+        # Set the date to string type if it is a datetime object
+        if isinstance(json_data['date'], datetime):
+            json_data['date'] = json_data['date'].strftime('%Y-%m-%d %H:%M:%S')
 
         data = event_schema.load(json_data)
         
@@ -37,7 +38,6 @@ class EventsResource(Resource):
     def get(self):
         events = event_service.find_all()
         return event_schema.dump(events, many=True), 200
-
 class EventResource(Resource):
     '''
     Class that represents the Event Resource
