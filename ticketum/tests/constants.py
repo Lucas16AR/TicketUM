@@ -32,6 +32,7 @@ event_data_3 = {
 # Guest data
 
 guest_data_1 = {
+    'guest_code': 'G-0001',
     'name': 'Guest One',
     'email': 'guestone@example.com',
     'phone': '123456789',
@@ -39,6 +40,7 @@ guest_data_1 = {
 }
 
 guest_data_2 = {
+    'guest_code': 'G-0002',
     'name': 'Guest Two',
     'email': 'guesttwo@example.com',
     'phone': '987654321',
@@ -46,6 +48,7 @@ guest_data_2 = {
 }
 
 guest_data_3 = {
+    'guest_code': 'G-0003',
     'name': 'Guest Three',
     'email': 'guestthree@example.com',
     'phone': '555555555',

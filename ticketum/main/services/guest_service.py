@@ -12,8 +12,9 @@ class GuestService(Service):
     def __init__(self):
         self.__repository = GuestRepository()
 
-    def create(self, name: str, email: str, phone: str, dni: int):
+    def create(self, guest_code: str, name: str, email: str, phone: str, dni: int):
         guest_model = GuestModel(
+            guest_code=guest_code,
             name=name,
             email=email,
             phone=phone,

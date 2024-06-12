@@ -6,6 +6,7 @@ class GuestSchema(Schema):
     Mapping class to serialize and deserialize the GuestModel
     '''
     id = fields.Int(dump_only=True)
+    guest_code = fields.Str(required=True)
     name = fields.Str(required=True, validate=validate.Length(min=1, max=100))
     email = fields.Str(required=True)
     phone = fields.Str(validate=validate.Length(max=20))

@@ -43,6 +43,7 @@ class TestGuestController(BaseTestCase):
         Test the POST /guests controller
         """
         guest_data = {
+            'guest_code': 'G-1234', 
             'name': 'Test Guest',
             'email': 'testguest@example.com',
             'phone': '123456789',
@@ -66,6 +67,7 @@ class TestGuestController(BaseTestCase):
         Test the PUT /guests/<id> controller
         """
         updated_data = {
+            'guest_code': 'G-1234',
             'name': 'Updated Guest',
             'email': 'updatedguest@example.com',
             'phone': '987654321',
@@ -107,6 +109,7 @@ class TestGuestService(BaseTestCase):
         Test the create method of GuestService
         """
         guest_data = {
+            'guest_code': 'G-1234',
             'name': 'Test Guest',
             'email': 'testguest@example.com',
             'phone': '123456789',
