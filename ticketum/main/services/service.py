@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Create(ABC):
+class Service(ABC):
     '''
     Abstract class with the abstract methods to create a model
     param:
@@ -14,13 +14,6 @@ class Create(ABC):
             - object: Object to create
         '''
         pass
-
-class Read(ABC):
-    '''
-    Abstract class with the abstract methods to read a model
-    param:
-        - ABC: Abstract class from which it inherits
-    '''
 
     @abstractmethod
     def find_all(self):
@@ -36,12 +29,6 @@ class Read(ABC):
         '''
         pass
 
-class Update(ABC):
-    '''
-    Abstract class with the abstract methods to update a model
-    param:
-        - ABC: Abstract class from which it inherits.
-    '''
     @abstractmethod
     def update(self, model: object):
         '''
@@ -49,15 +36,9 @@ class Update(ABC):
         '''
         pass
 
-class Delete(ABC):
-    '''
-    Abstract class with the abstract methods to delete a model
-    param:
-        - ABC: Abstract class from which it inherits.
-    '''
     @abstractmethod
     def delete(self, object):
         '''
         Method to delete a model
         '''
-        pass 
+        pass

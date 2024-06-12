@@ -6,9 +6,11 @@ class Event {
     - date: Date
     - location: String
     - description: String
-    - guests: List<Guests>
+    - inscriptions: List<Inscription>
     - capacity: Int
-    + addGuest(guest: Guest)
+    + countInscriptions(): Int
+    + showEvent(): void
+
 }
 
 class Guest {
@@ -16,7 +18,17 @@ class Guest {
     - email: String
     - phone: String
     - dni: String
-    - eventsList: List<Event>
+    - inscriptions: List<Inscription>
 }
 
-Event "1..*" *--* "1..*" Guest
+class Inscription {
+    - event: Event
+    - guest: Guest
+    - status: String
+    + addInscription(): void
+    + deleteInscription(): void
+    + showInscription(): void
+}
+
+Event "1" *-- "0..*" Inscription
+Guest "1" *-- "0..*" Inscription

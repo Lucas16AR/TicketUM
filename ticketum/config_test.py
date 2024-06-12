@@ -17,3 +17,13 @@ class Config:
         self.DB_ENGINE = os.getenv('DB_ENGINE')
         self.DB_PATH = os.getenv('DB_PATH')
         self.SV_PORT = os.getenv('SV_PORT')
+
+
+class TestConfig(Config):
+    '''
+    Configuration class for testing
+    '''
+    def load_env_variables(self):
+        self.DB_ENGINE = 'sqlite:///:memory:'
+        self.SQLALCHEMY_TRACK_MODIFICATIONS = False
+        self.TESTING = True

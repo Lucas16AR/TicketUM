@@ -1,11 +1,10 @@
 from .repository import Create, Read, Update, Delete
 from .. import db
-from main.models import GuestModel
+from main.models import InscriptionModel
 
-
-class GuestRepository(Create, Read, Update, Delete):
+class InscriptionRepository(Create, Read, Update, Delete):
     '''
-    Class to manage the CRUD operations of the GuestModel
+    Class to manage the CRUD operations of the InscriptionModel
     param:
         - Create: Abstract class to create a model
         - Read: Abstract class to read a model
@@ -14,7 +13,7 @@ class GuestRepository(Create, Read, Update, Delete):
     '''
 
     def __init__(self):
-        self.model = GuestModel
+        self.model = InscriptionModel
 
     def create(self, model: object):
         db.session.add(model)
