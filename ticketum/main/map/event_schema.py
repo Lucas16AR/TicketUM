@@ -5,8 +5,7 @@ class EventSchema(Schema):
     '''
     Mapping class to serialize and deserialize the EventModel
     '''
-    id = fields.Int(dump_only=True)
-    event_code = fields.Str(required=True, validate=validate.Length(min=1, max=100))
+    code = fields.Str(attribute='event_code', required=True, validate=validate.Length(min=1, max=100))
     name = fields.Str(required=True)
     description = fields.Str(required=True)
     date = fields.Str(required=True)
@@ -14,6 +13,11 @@ class EventSchema(Schema):
     capacity = fields.Int(required=True)
 
     inscriptions = fields.List(fields.Nested('InscriptionSchema', exclude=('event',)))
+
+    total_inscriptions = fields.Method("get_total_inscriptions")
+
+    def get_total_inscriptions(self, event):
+        return len(event.inscriptions)
 
     # Method to deserialize the data
     @post_load

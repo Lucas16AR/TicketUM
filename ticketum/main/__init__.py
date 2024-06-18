@@ -53,11 +53,9 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
 
     from .routes.event_routes import event_bp
-    from .routes.guest_routes import guest_bp
     from .routes.inscription_routes import inscription_bp
 
     app.register_blueprint(event_bp, url_prefix='/api')
-    app.register_blueprint(guest_bp, url_prefix='/api')
     app.register_blueprint(inscription_bp, url_prefix='/api')
 
     return app
