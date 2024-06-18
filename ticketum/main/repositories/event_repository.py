@@ -27,6 +27,9 @@ class EventRepository(Create, Read, Update, Delete):
     def find_by_id(self, id: int):
         return self.model.query.get(id)
     
+    def find_by_code(self, code: str):
+        return self.model.query.filter_by(event_code=code).first()
+    
     def update(self, model: object):
         db.session.commit()
         return model

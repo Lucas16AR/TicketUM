@@ -31,6 +31,9 @@ class EventService(Service):
     def find_by_id(self, id: int):
         return self.__repository.find_by_id(id)
     
+    def find_by_code(self, code: str):
+        return self.__repository.find_by_code(code)
+    
     def update(self, id: int, event_code: str, name: str, description: str, date, location: str, capacity: int):
 
         event_model = EventModel(

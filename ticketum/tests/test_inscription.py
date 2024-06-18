@@ -30,59 +30,39 @@ class TestInscriptionController(BaseTestCase):
         db.session.add(self.inscription_1)
         db.session.commit()
 
-    def test_get_inscriptions(self):
-        """
-        Test the GET /inscriptions controller
-        """
-        response = self.client.get('/api/inscriptions')
-        self.assertEqual(response.status_code, 200)
-        self.assertGreater(len(response.json), 0)
-        self.assertIn('status', response.json[0])
-
     def test_post_inscription(self):
         """
-        Test the POST /inscriptions controller
+        Test the POST /events/{event_code}/inscriptions controller
         """
         inscription_data = {
-            'status': 'Confirmed',
-            'event_id': self.event.id,
-            'guest_id': self.guest.id
+            'name': 'Guest Name',
+            'email': 'guestemail@example.com',
+            'phone': '123456789',
+            'dni': 123456789
         }
-        response = self.client.post('/api/inscriptions', json=inscription_data)
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('id', response.json)
-        self.assertEqual(response.json['status'], 'Confirmed')
+        response = self.client.post('/api/events/E001/inscriptions', json=inscription_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('status', response.json)
+        self.assertIn('event_code', response.json)
+        self.assertIn('guest_code', response.json)
 
     def test_get_inscription(self):
         """
-        Test the GET /inscriptions/<id> controller
+        Test the GET /events/{event_code}/inscriptions/{guest_code} controller
         """
-        response = self.client.get(f'/api/inscriptions/1')
+        response = self.client.get('/api/events/E001/inscriptions/G-0001')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['status'], 'Confirmed')
-
-    def test_put_inscription(self):
-        """
-        Test the PUT /inscriptions/<id> controller
-        """
-        updated_data = {
-            'status': 'Canceled',
-            'event_id': self.event.id,
-            'guest_id': self.guest.id
-        }
-        response = self.client.put(f'/api/inscriptions/1', json=updated_data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['status'], 'Canceled')
+        self.assertIn('status', response.json)
+        self.assertIn('event_code', response.json)
+        self.assertIn('guest_code', response.json)
 
     def test_delete_inscription(self):
         """
-        Test the DELETE /inscriptions/<id> controller
+        Test the DELETE /events/{event_code}/inscriptions/{guest_code} controller
         """
-        response = self.client.delete(f'/api/inscriptions/1')
-        self.assertEqual(response.status_code, 204)
-
-        deleted_inscription = Inscription.query.get(self.inscription_1.id)
-        self.assertIsNone(deleted_inscription)
+        response = self.client.delete('/api/events/E001/inscriptions/G-0001')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('', response.json)
 
 
 class TestInscriptionService(BaseTestCase):

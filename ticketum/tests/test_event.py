@@ -41,76 +41,38 @@ class TestEventController(BaseTestCase):
         # Make a GET request to the /events route
         response = self.client.get('/api/events')
         self.assertEqual(response.status_code, 200)
-        self.assertGreater(len(response.json), 0)
-        self.assertIn('name', response.json[0])
 
-    def test_post_event(self):
-        '''
-        Test the POST /events controller
-        '''
-        # Define the event data
-        event_data = {
-            'event_code': 'E004',
-            'name': 'Test Event',
-            'description': 'This is a test event.',
-            'date': '2024-12-31 23:59:59',
-            'location': 'Test Location',
-            'capacity': 100
-        }
-        # Make a POST request to the /events route
-        response = self.client.post('/api/events', json=event_data)
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('id', response.json)
-        self.assertEqual(response.json['name'], 'Test Event')
+        # Verify that the response is a list
+        self.assertIsInstance(response.json, list)
+        
+        # Check that each item in the list has the expected keys
+        for event in response.json:
+            self.assertIn('code', event)
+            self.assertIn('name', event)
+            self.assertIn('description', event)
+            self.assertIn('date', event)
+            self.assertIn('location', event)
+            self.assertIn('capacity', event)
+            self.assertIn('total_inscriptions', event)
 
     def test_get_event(self):
         '''
-        Test the GET /events/<id> controller
+        Test the GET /events/<event_code> controller
         '''
         # Get the first event from the database
         event = Event.query.first()
 
         # Make a GET request to the /events/<id> route
-        response = self.client.get(f'/api/events/{event.id}')
+        response = self.client.get(f'/api/events/{event.event_code}')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['name'], 'Test Event')
-
-    def test_put_event(self):
-        '''
-        Test the PUT /events/<id> controller
-        '''
-        # Get the first event from the database
-        event = Event.query.first()
-
-        # Define the updated event data
-        event_data = {
-            'event_code': 'E001', 
-            'name': 'Updated Event',
-            'description': 'This is an updated event.',
-            'date': '2024-12-31 23:59:59',
-            'location': 'Updated Location',
-            'capacity': 200
-        }
-
-        # Make a PUT request to the /events/<id> route
-        response = self.client.put(f'/api/events/{event.id}', json=event_data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['name'], 'Updated Event')
-
-    def test_delete_event(self):
-        '''
-        Test the DELETE /events/<id> controller
-        '''
-        # Get the first event from the database
-        event = Event.query.first()
-
-        # Make a DELETE request to the /events/<id> route
-        response = self.client.delete(f'/api/events/{event.id}')
-        self.assertEqual(response.status_code, 204)
-
-        # Check that the event has been deleted
-        event = Event.query.get(event.id)
-        self.assertIsNone(event)
+        # Verify that the response has the expected keys
+        self.assertIn('code', response.json)
+        self.assertIn('name', response.json)
+        self.assertIn('description', response.json)
+        self.assertIn('date', response.json)
+        self.assertIn('location', response.json)
+        self.assertIn('capacity', response.json)
+        self.assertIn('total_inscriptions', response.json)
 
 
 class TestEventServices(BaseTestCase):

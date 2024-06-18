@@ -6,4 +6,4 @@ event_bp = Blueprint('event', __name__)
 api = Api(event_bp)
 
 api.add_resource(EventsResource, '/events')
-api.add_resource(EventResource, '/events/<int:event_id>')
+api.add_resource(EventResource, '/events/<string:event_code>')
