@@ -4,12 +4,16 @@ from flask_migrate import Migrate
 from config import Config
 from config_test import TestConfig
 import os
+from flask_mail import Mail
 
 # Initialize the ORM
 db = SQLAlchemy()
 
 # Initialize the migration engine
 migrate = Migrate()
+
+# Initialize the mail engine
+mail = Mail()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -57,5 +61,13 @@ def create_app(config_class=Config):
 
     app.register_blueprint(event_bp, url_prefix='/api')
     app.register_blueprint(inscription_bp, url_prefix='/api')
+
+    app.config['MAIL_SERVER'] = config.MAIL_SERVER
+    app.config['MAIL_PORT'] = config.MAIL_PORT
+    app.config['MAIL_USE_TLS'] = config.MAIL_USE_TLS
+    app.config['MAIL_USERNAME'] = config.MAIL_USERNAME
+    app.config['MAIL_PASSWORD'] = config.MAIL_PASSWORD
+
+    mail.init_app(app)
 
     return app

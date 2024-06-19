@@ -1,8 +1,10 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, current_app
 from main.services import InscriptionService, GuestService, EventService
 from main.map import InscriptionSchema, GuestSchema, EventSchema
 import random
+from flask_mail import Message
+from main import mail
 
 inscription_service = InscriptionService()
 inscription_schema = InscriptionSchema()
@@ -52,6 +54,9 @@ class InscriptionsResource(Resource):
         # Serialize the inscription created
         inscription = inscription_schema.dump(inscription_creation)
 
+        # Send email to the guest
+        self.send_registration_email(guest.email, event.name)
+
         # Return the Inscription created with status, event code and guest code
         inscription_response = {
             'status': inscription['status'],
@@ -60,6 +65,14 @@ class InscriptionsResource(Resource):
         }
 
         return inscription_response, 200
+    
+    def send_registration_email(self, recipient, event_name):
+        # Send email to the guest
+        msg = Message(subject="Registration Confirmation",
+                      sender=current_app.config['MAIL_USERNAME'],
+                      recipients=[recipient])
+        msg.body = f"Dear guest,\n\nThank you for registering for the event: {event_name}. Your inscription is pending. We will contact you when the organizer accepts it.\n\nBest regards,\nThe Event Team"
+        mail.send(msg)
     
 class InscriptionResource(Resource):
     '''
